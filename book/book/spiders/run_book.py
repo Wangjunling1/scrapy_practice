@@ -18,25 +18,27 @@ class Blues(scrapy.Spider):
             yield scrapy.Request(url='https://www.lwxslwxs.com'+item["data_url"],callback=self.content,meta={'data':item})
 
     def content(self,response):
+        print(response)
         item = response.meta['data']
         item['book_title'] = response.xpath('//div[@class="panel-heading"][1]/text()').extract_first()
-        item['book_text'] = ''
-        for i in range(3):
+        item['book_text'] = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
+        for i in range(2,7):
             page=os.path.split(response.url)[-1][:-5]+'-{}.html'.format(i)
             url=os.path.split(response.url)[0]+'/'+page
             yield scrapy.Request(url=url,callback=self.next,meta={'data':item})
 
+
     def next(self,response):
         print(response)
         item = response.meta['data']
-        net = response.xpath('//li[@class="next"]/a[@class="btn btn-info"]/@href').extract_first()
         text = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
-        if  item["book_text_next"] != net:
-            item["book_text_next"]=net
-            item["book_text"]=item["book_text"]+text
-        if item["book_text_next"] == net:
-            print(item["book_text"])
+        item["book_text{}".format(response.url.split('-')[-1][0])]=text
+        # print(item["book_text{}".format(response.url.split('-')[-1][0])])
+        if len(item["book_text6"])>6 and len(item["book_text2"])>6 and len(item["book_text3"])>6 and len(item["book_text4"])>6 and len(item["book_text5"])>6:
+            print('插入')
             yield item
+
+
 
 
 

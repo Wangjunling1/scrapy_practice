@@ -56,7 +56,7 @@ DOWNLOADER_MIDDLEWARES = {
     'book.middlewares.BookDownloaderMiddleware': 543,
     'scrapy.contrib.downloadermiddle ware.useragent.UserAgentMiddleware' : None,
     'book.rotate_useragent.RotateUserAgentMiddleware':400,
-    # 'book.middlewares.ProxyMiddleware':1
+    'book.middlewares.ProxyMiddleware':1
 }
 
 # Enable or disable extensions
