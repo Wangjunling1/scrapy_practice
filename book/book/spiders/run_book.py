@@ -1,49 +1,147 @@
 import scrapy,os
 from book.items import BookItem
+from scrapy.linkextractor import LinkExtractor
 
 class Blues(scrapy.Spider):
     name='book'
 
     allowed_domains=['www.lwxslwxs.com']
-    start_urls=['https://www.lwxslwxs.com/51/51339/']
+
+    with open(r'D:\python项目\爬虫\one\book\book\spiders\mulu_url.txt','r',encoding='utf-8') as f:
+        f=f.read()
+    start_urls = []
+    for url in f.split('::::::'):
+        start_urls.append(str(url))
     def parse(self, response):
         item = BookItem()
-        item["book_text_next"] = ''
 
-        item['book_name']=response.xpath('//div[@class="info2"]/h1[@class=" text-center"]/text()').extract_first()
-        datas=response.xpath('//div[@class="row"][3]/div[@class="col-sm-12 col-md-12"]/div[@class="panel panel-default"]/div[@class="panel-body"]/ul/li')
-        print(item['book_name'])
-        for data in datas:
-            item["data_url"]=data.xpath('a/@href').extract_first()
-            yield scrapy.Request(url='https://www.lwxslwxs.com'+item["data_url"],callback=self.content,meta={'data':item})
+        item['book_text']=''
+        item['book_text2']=''
+        item['book_text3']=''
+        item['book_text4']=''
+        item['book_text5']=''
+        item['book_text6']=''
+        item['book_text7']=''
+        item['book_text8']=''
+        item['book_text9']=''
+        item['book_text10']=''
 
-    def content(self,response):
-        print(response)
-        item = response.meta['data']
         item['book_title'] = response.xpath('//div[@class="panel-heading"][1]/text()').extract_first()
         item['book_text'] = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
-        for i in range(2,7):
-            page=os.path.split(response.url)[-1][:-5]+'-{}.html'.format(i)
-            url=os.path.split(response.url)[0]+'/'+page
-            yield scrapy.Request(url=url,callback=self.next,meta={'data':item})
-
-
-    def next(self,response):
-        print(response)
-        item = response.meta['data']
-        text = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
-        item["book_text{}".format(response.url.split('-')[-1][0])]=text
-        # print(item["book_text{}".format(response.url.split('-')[-1][0])])
-        if len(item["book_text6"])>6 and len(item["book_text2"])>6 and len(item["book_text3"])>6 and len(item["book_text4"])>6 and len(item["book_text5"])>6:
-            print('插入')
+        next_link = LinkExtractor(restrict_xpaths='//li[@class="next"]/a')
+        next_links = next_link.extract_links(response)
+        print(next_links[0].url)
+        print(response.url.split('.html')[0])
+        if response.url.split('.html')[0] in next_links[0].url:
+            yield scrapy.Request(url=next_links[0].url,callback=self.next2,meta={'data':item})
+        else:
             yield item
 
 
+    def next2(self,response):
 
 
+        item = response.meta['data']
 
+        item['book_text2'] = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
+        next_link = LinkExtractor(restrict_xpaths='//li[@class="next"]/a')
+        next_links = next_link.extract_links(response)
+        print(next_links[0].url)
+        print(response.url.split('-')[0])
+        if response.url.split('-')[0] in next_links[0].url:
+            yield scrapy.Request(url=next_links[0].url, callback=self.next3, meta={'data': item})
+        else:
+            yield item
 
+    def next3(self,response):
+        item = response.meta['data']
+        item['book_text3'] = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
+        next_link = LinkExtractor(restrict_xpaths='//li[@class="next"]/a')
+        next_links = next_link.extract_links(response)
+        print(next_links[0].url)
+        print(response.url.split('-')[0])
+        if response.url.split('-')[0] in next_links[0].url:
+            yield scrapy.Request(url=next_links[0].url, callback=self.next4, meta={'data': item})
+        else:
+            yield item
 
+    def next4(self,response):
+        item = response.meta['data']
+        item['book_text4'] = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
+        next_link = LinkExtractor(restrict_xpaths='//li[@class="next"]/a')
+        next_links = next_link.extract_links(response)
+        print(next_links[0].url)
+        print(response.url.split('-')[0])
+        if response.url.split('-')[0] in next_links[0].url:
+            yield scrapy.Request(url=next_links[0].url, callback=self.next5, meta={'data': item})
+        else:
+            yield item
 
+    def next5(self,response):
+        item = response.meta['data']
+        item['book_text5'] = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
+        next_link = LinkExtractor(restrict_xpaths='//li[@class="next"]/a')
+        next_links = next_link.extract_links(response)
+        print(next_links[0].url)
+        print(response.url.split('-')[0])
+        if response.url.split('-')[0] in next_links[0].url:
+            yield scrapy.Request(url=next_links[0].url, callback=self.next6, meta={'data': item})
+        else:
+            yield item
 
+    def next6(self,response):
+        item = response.meta['data']
+        item['book_text6'] = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
+        next_link = LinkExtractor(restrict_xpaths='//li[@class="next"]/a')
+        next_links = next_link.extract_links(response)
+        print(next_links[0].url)
+        print(response.url.split('-')[0])
+        if response.url.split('-')[0] in next_links[0].url:
+            yield scrapy.Request(url=next_links[0].url, callback=self.next7, meta={'data': item})
+        else:
+            yield item
 
+    def next7(self,response):
+        item = response.meta['data']
+        item['book_text7'] = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
+        next_link = LinkExtractor(restrict_xpaths='//li[@class="next"]/a')
+        next_links = next_link.extract_links(response)
+        print(next_links[0].url)
+        print(response.url.split('-')[0])
+        if response.url.split('-')[0] in next_links[0].url:
+            yield scrapy.Request(url=next_links[0].url, callback=self.next8, meta={'data': item})
+        else:
+            yield item
+
+    def next8(self,response):
+        item = response.meta['data']
+        item['book_text8'] = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
+        next_link = LinkExtractor(restrict_xpaths='//li[@class="next"]/a')
+        next_links = next_link.extract_links(response)
+        print(next_links[0].url)
+        print(response.url.split('-')[0])
+        if response.url.split('-')[0] in next_links[0].url:
+            yield scrapy.Request(url=next_links[0].url, callback=self.next9, meta={'data': item})
+        else:
+            yield item
+
+    def next9(self,response):
+        item = response.meta['data']
+        item['book_text9'] = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
+        next_link = LinkExtractor(restrict_xpaths='//li[@class="next"]/a')
+        next_links = next_link.extract_links(response)
+        print(next_links[0].url)
+        print(response.url.split('-')[0])
+        if response.url.split('-')[0] in next_links[0].url:
+            yield scrapy.Request(url=next_links[0].url, callback=self.next10, meta={'data': item})
+        else:
+            yield item
+
+    def next10(self,response):
+        item = response.meta['data']
+        item['book_text10'] = ','.join(response.xpath('//div[@class="panel-body content-body content-ext"]/text()').extract())
+        next_link = LinkExtractor(restrict_xpaths='//li[@class="next"]/a')
+        next_links = next_link.extract_links(response)
+        print(next_links[0].url)
+        print(response.url.split('-')[0])
+        yield item

@@ -23,6 +23,10 @@ class BookItem(scrapy.Item):
     book_text4=scrapy.Field()
     book_text5=scrapy.Field()
     book_text6=scrapy.Field()
+    book_text7=scrapy.Field()
+    book_text8=scrapy.Field()
+    book_text9=scrapy.Field()
+    book_text10=scrapy.Field()
 
     book_text_next=scrapy.Field()
 

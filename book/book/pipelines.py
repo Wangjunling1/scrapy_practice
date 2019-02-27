@@ -17,11 +17,13 @@ class BookPipeline(object):
         book_title=(item['book_title']).lstrip().replace("'",'"')
 
         book_text=','.join((','.join((item['book_text']).split())).split("', '"))
-        book_text2=','.join((','.join((item['book_text2']).split())).split("', '"))
-        book_text=book_text+book_text2
-        for i in range(2,6):
-            if ','.join((','.join((item['book_text{}'.format(i)]).split())).split("', '")) != ','.join((','.join((item['book_text{}'.format(i+1)]).split())).split("', '")):
-                book_text=book_text+','.join((','.join((item['book_text{}'.format(i+1)]).split())).split("', '"))
+        if len(item['book_text2']) > 10:
+            book_text2=','.join((','.join((item['book_text2']).split())).split("', '"))
+            book_text=book_text+book_text2
+            for i in range(2,10):
+                if len(item['book_text{}'.format(i+1)]) >3:
+                    if  ','.join((','.join((item['book_text{}'.format(i)]).split())).split("', '")) != ','.join((','.join((item['book_text{}'.format(i+1)]).split())).split("', '")):
+                        book_text=book_text+','.join((','.join((item['book_text{}'.format(i+1)]).split())).split("', '"))
 
 
         with open('{}.txt'.format(book_name),'a+',encoding='utf-8') as f:
